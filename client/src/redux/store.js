@@ -2,9 +2,12 @@ import { configureStore ,combineReducers} from '@reduxjs/toolkit'
 import  userReducer from './user/userSlice'
 import storage from 'redux-persist/lib/storage'
 import { persistReducer, persistStore } from 'redux-persist';
+import themeRedeucer from './theme/themeSlice'
+import { theme } from 'flowbite-react';
 
 const rootReducer = combineReducers({
   user: userReducer,
+  theme: themeRedeucer,
 })
 
 const persistConfig = {

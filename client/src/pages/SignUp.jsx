@@ -54,7 +54,7 @@ export default function SignUp() {
           </span>
           Space
           </Link>
-          <p className='text-sm mt-5'>
+          <p className='text-sm mt-5 '>
             Write, Share, Inspire – Your Stories, Your Voice, Your Blog
           </p>
         </div>
