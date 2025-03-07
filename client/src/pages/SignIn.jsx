@@ -22,6 +22,7 @@ export default function SignIn() {
       dispatch(signInStart());
       const res = await fetch('http://localhost:3000/api/auth/signin', {
         method: 'POST',
+        credentials: true,
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(formData),
       });

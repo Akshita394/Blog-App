@@ -54,7 +54,10 @@ export const signin = async (req,res,next) => {
       const { password: _, ...rest } = validUser.toObject(); 
 
       res.status(200).cookie('access_token',token, {
-        httpOnly: true
+        httpOnly: true,          // Prevents JavaScript access
+        secure: process.env.NODE_ENV === "production",  // Use secure cookies in production
+        sameSite: "Strict",      // Prevents CSRF attacks
+        expires: new Date(Date.now() + 3600000)
       }).json(rest);
       
     }catch(error){
@@ -71,7 +74,10 @@ export const google = async (req,res,next) => {
       const {password,...rest} = user._doc;
 
       res.status(200).cookie('access_token',token, {
-        httpOnly: true
+        httpOnly: true,          // Prevents JavaScript access
+        secure: process.env.NODE_ENV === "production",  // Use secure cookies in production
+        sameSite: "Strict",      // Prevents CSRF attacks
+        expires: new Date(Date.now() + 3600000)
       }).json(rest);
     }else{
       const generatedPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
@@ -83,11 +89,14 @@ export const google = async (req,res,next) => {
         profilePicture: googlePhotoUrl,
       })
       await newUser.save();
-      const token = jwt.sign({id: user._id},process.env.JWT_SECRET)
-      const {password,...rest} = user._doc;
+      const token = jwt.sign({ id: newUser._id},process.env.JWT_SECRET)
+      const {password,...rest} = newUser._doc;
 
       res.status(200).cookie('access_token',token, {
-        httpOnly: true
+        httpOnly: true,          // Prevents JavaScript access
+        secure: process.env.NODE_ENV === "production",  // Use secure cookies in production
+        sameSite: "Strict",      // Prevents CSRF attacks
+        expires: new Date(Date.now() + 3600000)
       }).json(rest);
     }
   } catch (error) {
