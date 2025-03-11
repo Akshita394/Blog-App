@@ -22,7 +22,7 @@ export default function SignUp() {
       setErrorMessage(null)
       const res = await fetch('http://localhost:3000/api/auth/signup', {
         method: 'POST',
-        credentials: true,
+        //credentials: "include",
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(formData),
       });
