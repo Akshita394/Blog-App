@@ -50,6 +50,7 @@ export const signin = async (req,res,next) => {
       { id: validUser._id },
       process.env.JWT_SECRET
     );
+    
 
     {/*const { password: pass, ...rest } = validUser._doc;*/}
     const { password: _, ...rest } = validUser.toObject(); 
@@ -87,6 +88,7 @@ export const google = async (req,res,next) => {
         sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict', 
       }).
       json(rest);
+      
     }else{
       const generatedPassword = 
       Math.random().toString(36).slice(-8) + 

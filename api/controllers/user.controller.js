@@ -1,9 +1,12 @@
 import bcryptjs from "bcryptjs";
 import User from "../models/user.model.js";
 import { errorHandler } from "../utils/error.js";
+import cloudinary from "../config/cloudinary.js";
+
 export const test = (req, res) => {
   res.json({ message: "Api is working" });
 };
+
 export const updateUser = async (req, res, next) => {
   if (req.user.id !== req.params.userId) {
     return next(errorHandler(403, "you are not allowed to update user"));
@@ -52,6 +55,78 @@ export const updateUser = async (req, res, next) => {
     }
 };
 
+
+
+export const deleteUser = async (req, res, next) => {
+  if (req.user.id !== req.params.userId) {
+    return next(errorHandler(403, "You are not allowed to delete this user"));
+  }
+
+  try {
+    const user = await User.findById(req.params.userId);
+    if (!user) {
+      return next(errorHandler(404, "User not found"));
+    }
+
+    // Extract publicId from Cloudinary URL
+    const imageUrl = user.profilePicture; // Assuming profilePicture stores Cloudinary URL
+    const publicId = imageUrl?.split("/").pop().split(".")[0]; // Extract Cloudinary publicId
+
+    if (publicId) {
+      await cloudinary.uploader.destroy(publicId); // ✅ Delete from Cloudinary
+    }
+
+    await User.findByIdAndDelete(req.params.userId); // ✅ Delete user from DB
+    res.status(200).json({ message: "User has been deleted along with profile picture" });
+
+  } catch (error) {
+    next(error);
+  }
+};
+
+/*
+export const deleteUser = async (req, res, next) => {
+  if (req.user.id !== req.params.userId) {
+    return next(errorHandler(403, "You are not allowed to delete this user"));
+  }
+
+  try {
+    // Find user in the database
+    const user = await User.findById(req.params.userId);
+    if (!user) {
+      return next(errorHandler(404, "User not found"));
+    }
+
+    // Function to extract publicId from image URL
+    const extractPublicId = (imageUrl) => {
+      const parts = imageUrl.split("/");
+      const uploadIndex = parts.indexOf("upload");
+      if (uploadIndex === -1) return null; // Invalid URL
+      return parts.slice(uploadIndex + 1).join("/").split(".")[0];
+    };
+
+    // Get publicId (either from DB or extract from image URL)
+    let publicId = user.profilePicture?.publicId;
+    if (!publicId && user.profilePicture?.url) {
+      publicId = extractPublicId(user.profilePicture.url);
+    }
+
+    // Delete profile picture from Cloudinary if exists
+    if (publicId) {
+      await cloudinary.uploader.destroy(publicId);
+    }
+
+    // Delete user from database
+    await User.findByIdAndDelete(req.params.userId);
+
+    res.status(200).json({ message: "User and profile picture deleted successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+/*
 export const deleteUser = async (req, res, next) => {
   if(req.user.id !== req.params.userId) {
     return next(errorHandler(403, "you are not allowed to delete user"));
@@ -62,5 +137,5 @@ export const deleteUser = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-}
+}*/
 
