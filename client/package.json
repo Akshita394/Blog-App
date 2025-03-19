@@ -10,6 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@lexical/list": "^0.28.0",
+    "@lexical/react": "^0.27.2",
+    "@lexical/rich-text": "^0.27.2",
+    "@lexical/selection": "^0.28.0",
     "@reduxjs/toolkit": "^2.5.1",
     "axios": "^1.8.1",
     "firebase": "^11.3.1",
