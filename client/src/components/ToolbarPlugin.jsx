@@ -41,7 +41,7 @@ const ToolbarPlugin = () => {
   };
 
   // Update toolbar state
-  const updateToolbar = useCallback(() => {
+ /* const updateToolbar = useCallback(() => {
     const selection = $getSelection();
     if ($isRangeSelection(selection)) {
       setActiveFormats({
@@ -51,7 +51,22 @@ const ToolbarPlugin = () => {
         strikethrough: selection.hasFormat("strikethrough"),
       });
     }
-  }, []);
+  }, []);*/
+  
+   // Update toolbar state
+   const updateToolbar = useCallback(() => {
+    editor.getEditorState().read(() => {
+      const selection = $getSelection();
+      if ($isRangeSelection(selection)) {
+        setActiveFormats({
+          bold: selection.hasFormat("bold"),
+          italic: selection.hasFormat("italic"),
+          underline: selection.hasFormat("underline"),
+          strikethrough: selection.hasFormat("strikethrough"),
+        });
+      }
+    });
+  }, [editor]);
 
   useEffect(() => {
     return editor.registerUpdateListener(() => {
