@@ -4,6 +4,8 @@ import  LexicalEditor from '../components/LexicalEditor.jsx'
 import { CircularProgressbar } from "react-circular-progressbar"; 
 import 'react-circular-progressbar/dist/styles.css';
 import { useNavigate } from "react-router-dom";
+import SunEditor from 'suneditor-react';
+import 'suneditor/dist/css/suneditor.min.css';
 
 export default function CreatePost() {
   const [file,setFiles] = useState(null);
@@ -167,10 +169,26 @@ export default function CreatePost() {
             )
           }
         </div>
-        <LexicalEditor  
+        {/*<LexicalEditor  
         required
         onChange={(value) => setFormData({...formData, content: value}) }
-        />
+        />*/}
+        <SunEditor
+          setContents={formData.content || ""}
+          onChange={(content) => setFormData({...formData, content})}
+          placeholder="Write something amazing..."
+          setOptions={{
+            height: 200,
+            buttonList: [
+              ['undo', 'redo'],
+              ['font', 'fontSize', 'formatBlock'],
+              ['bold', 'underline', 'italic', 'strike'],
+              ['outdent', 'indent'],
+              ['removeFormat'],
+              ['fullScreen', 'showBlocks', 'codeView'],
+            ],
+          }}
+          />
         <Button type="submit" gradientDuoTone="tealToLime">
           Publish
         </Button>

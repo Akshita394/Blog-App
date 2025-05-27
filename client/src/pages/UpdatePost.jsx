@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import {useSelector} from 'react-redux';
+import SunEditor from 'suneditor-react';
+import 'suneditor/dist/css/suneditor.min.css';
 
 export default function UpdatePost() {
   const [file,setFiles] = useState(null);
@@ -131,7 +133,7 @@ export default function UpdatePost() {
             id="title"
             className="flex-1 w-full text-4xl font-serif text-gray-700 bg-transparent border-none outline-none focus:ring-0 focus:border-transparent"
             onChange={(e) => setFormData({...formData, title: e.target.value})}
-            value={formData.title || ""} // Ensure controlled input
+            value={formData.title} // Ensure controlled input
             // className="flex-1 outline-none border-none bg-transparent text-4xl placeholder-gray-400"
           />
           <Select
@@ -187,7 +189,7 @@ export default function UpdatePost() {
             )
           }
         </div>
-        <LexicalEditor
+        {/*<LexicalEditor
             value={formData.content}
             onChange={(value) =>
             setFormData((prev) => ({ ...prev, content: value }))
@@ -199,6 +201,22 @@ export default function UpdatePost() {
         onChange={(value) => setFormData({...formData, content: value}) }
         value={formData.content} // Ensure controlled input
         /> */}
+        <SunEditor
+          setContents={formData.content || ""}
+          onChange={(content) => setFormData({...formData, content})}
+          placeholder="Write something amazing..."
+          setOptions={{
+            height: 200,
+            buttonList: [
+              ['undo', 'redo'],
+              ['font', 'fontSize', 'formatBlock'],
+              ['bold', 'underline', 'italic', 'strike'],
+              ['outdent', 'indent'],
+              ['removeFormat'],
+              ['fullScreen', 'showBlocks', 'codeView'],
+            ],
+          }}
+          />
         <Button type="submit" gradientDuoTone="tealToLime">
           Update
         </Button>
