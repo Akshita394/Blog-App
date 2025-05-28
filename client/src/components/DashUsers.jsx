@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { Button, Modal, Table } from 'flowbite-react';
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { FaCheck, FaTimes } from 'react-icons/fa';
+import { set } from 'mongoose';
 
 
 export default function DashUsers() {
@@ -55,7 +56,21 @@ export default function DashUsers() {
     }
   }
   const handleDeleteUser = async () => {
-
+    try {
+       const res = await fetch(`http://localhost:3000/api/user/delete/${userIdToDelete}`, {
+        method: 'DELETE',
+        credentials: 'include',
+    })
+    const data = await res.json();
+    if(res.ok) {
+        setUsers((prev) => prev.filter(user => user._id !== userIdToDelete));
+        setShowModal(false);
+    }else{
+        console.log(data.message);
+    }
+    } catch (error) {
+        console.log(error.message)
+    }
   }
   
   return (

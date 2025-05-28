@@ -16,6 +16,7 @@ export const verifyToken = (req, res, next) => {
                 return next(errorHandler(403, 'Invalid or expired token'));
             }
             req.user = decodedUser; // ✅ Attach user data to request
+            console.log("Decoded JWT:", decodedUser);
             next();
         });
 
